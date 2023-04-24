@@ -1,37 +1,98 @@
 package com.board.project.config;
 
-import lombok.extern.log4j.Log4j2;
+import com.board.project.service.LoginService;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Log4j2
+@AllArgsConstructor
 @Configuration
-public class SecureConfig {
+@EnableWebSecurity
+public class SecureConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+   private LoginService loginService;
+   @Bean
+   PasswordEncoder passwordEncoder() {
+      return new BCryptPasswordEncoder();
+   }
 
-        http.authorizeRequests((auth)->{
-           //권한이 없는 유저도 접근 가능 하도록 설정함
-           auth.antMatchers("/","/main/index","/login/join","/login/loginPage").permitAll();
-        });
-        http.csrf().disable();//교차 스크립팅 보안 금지 사용시 활성화
 
-        http.logout().deleteCookies("JSESSIONID");
+   @Bean
+   @Override
+   public AuthenticationManager authenticationManagerBean() throws Exception {
+      return super.authenticationManagerBean();
+   }
 
-        http.formLogin();//기본 로그인 폼으로 되돌리기.
+   @Override
+   public void configure(WebSecurity web) throws Exception {
+           StrictHttpFirewall firewall = new StrictHttpFirewall();
+           firewall.setAllowUrlEncodedDoubleSlash(true);
+           web.httpFirewall(firewall);
+       }
 
-        //OAuth2 인증 적용하기
-        http.oauth2Login();
+   @Override
+   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+      auth.userDetailsService(loginService).passwordEncoder(passwordEncoder());
+   }
 
-        return http.build();
-    }
+   @Override
+   protected void configure(HttpSecurity http) throws Exception {
+
+
+      http.csrf().disable()
+           .authorizeRequests()
+         .antMatchers("/whitelabel/").permitAll()
+         .antMatchers("/whitelabel/myPage","/whitelabel/register").hasRole("ADMIN")
+            .regexMatchers("^.*(?<!/)/{2}.*$").permitAll()
+
+
+            .and().formLogin()
+            .loginPage("/whitelabel/loginPage")
+            .loginProcessingUrl("/whitelabel/loginPage")
+            .usernameParameter("loginId")
+            .passwordParameter("password")
+            .defaultSuccessUrl("/whitelabel/")
+                  .permitAll()
+
+
+
+            .and().logout()
+            .logoutUrl("/whitelabel/logout")
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
+
+
+            .and()
+         .oauth2Login()
+
+            .and().
+         headers().frameOptions().sameOrigin()
+
+            .and().requiresChannel()
+            .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+            .requiresSecure()
+
+            .and()
+            .sessionManagement()
+            .maximumSessions(1) //세션 최대 허용 수
+            .maxSessionsPreventsLogin(false);
+      
+      
+
+
+   }
+
+
 }

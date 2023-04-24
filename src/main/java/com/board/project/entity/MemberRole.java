@@ -1,10 +1,13 @@
 package com.board.project.entity;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public enum MemberRole {
-    USER, ADMIN, MANAGER
-}
+
+    USER("ROLE_USER"), ADMIN("ROLE_ADMIN"), MANAGER("ROLE_MANAGER");
+    MemberRole(String value) {
+        this.value = value;
+    }
+    private String value;
+    }

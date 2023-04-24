@@ -6,10 +6,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /*
  * Entity : Spring 에서 테이블의 정보를 1 : 1로 가지고 있는 영속 객체입니다.
@@ -33,19 +32,30 @@ import java.time.LocalDateTime;
 @Data
 @Getter
 abstract class BaseEntity {
-	
-	//컬럼을 생성합니다
-	//여기에 생성되는 컬럼은 시간 값을 관리하는 컬럼이고
-	//속성을 이용해서 자동으로 값을 업데이트 할 지 여부를 조정할 수 있습니다.
-	@CreatedDate
-	@Column(name = "regDate", updatable = false)
-	private LocalDateTime regDate;
-	
-	//위의 컬럼은 방명록 작성시간을 나타내는 컬럼이고
-	//하위는 수정 시간을 나타내는 컬럼을 정의합니다
-	//참고로 수정시간을 자동으로 생성해주는 어노테이션이 있습니다
-	@LastModifiedDate
-	@Column(name = "modDate")
-	private LocalDateTime modDate;
-	
+   
+   //컬럼을 생성합니다
+   //여기에 생성되는 컬럼은 시간 값을 관리하는 컬럼이고
+   //속성을 이용해서 자동으로 값을 업데이트 할 지 여부를 조정할 수 있습니다.
+   @CreatedDate
+   @Column(name = "regDate", updatable = false)
+   private String regDate;
+   
+   //위의 컬럼은 방명록 작성시간을 나타내는 컬럼이고
+   //하위는 수정 시간을 나타내는 컬럼을 정의합니다
+   //참고로 수정시간을 자동으로 생성해주는 어노테이션이 있습니다
+   @LastModifiedDate
+   @Column(name = "modDate")
+   private String modDate;
+
+   @PrePersist
+   public void onPrePersist() {
+      this.regDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+      this.modDate = this.regDate;
+   }
+
+   @PreUpdate
+   public void onPreUpdate() {
+      this.modDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+   }
+   
 }
