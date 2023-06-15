@@ -74,8 +74,8 @@ public class SecureConfig extends WebSecurityConfigurerAdapter {
             .deleteCookies("JSESSIONID")
 
 
-            .and()
-         .oauth2Login()
+//            .and()
+//         .oauth2Login()
 
             .and().
          headers().frameOptions().sameOrigin()

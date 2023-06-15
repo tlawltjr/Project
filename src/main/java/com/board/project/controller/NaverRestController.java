@@ -95,7 +95,6 @@ public class NaverRestController {
         System.out.println(decodeName);
         
         Member member = Member.builder()
-        		.fromSocial(true)
         		.email(nEmail)
         		.name(decodeName)
         		.loginId(nEmail)

@@ -1,11 +1,7 @@
 package com.board.project.service;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
-import javax.annotation.PostConstruct;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,12 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 
 import com.board.project.dto.MemberAdapter;
@@ -52,8 +46,7 @@ public class LoginService implements UserDetailsService {
    @Override
    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
 
-      Member member = memberRepository.findByLoginId(loginId).orElseThrow(()
-              -> new UsernameNotFoundException("회원 정보가 없습니다."));
+      Member member = memberRepository.findByLoginId(loginId);
 
       System.out.println("여기는 로드유저" + member.toString());
 
@@ -114,7 +107,7 @@ public class LoginService implements UserDetailsService {
 	   
 	   String email = (String) properties.get("email");
 	   
-	   Member member = Member.builder().email(email).fromSocial(true).loginId(email).role(MemberRole.ADMIN.getValue()).build();
+	   Member member = Member.builder().email(email).loginId(email).role(MemberRole.ADMIN.getValue()).build();
 	   
 	   memberRepository.save(member);
 	   

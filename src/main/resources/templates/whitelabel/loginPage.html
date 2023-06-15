@@ -114,9 +114,8 @@
     <style>
 
         form {
-            width: 320px;
+            width: auto;
             margin: 50px auto;
-            background: #f8d348;
             display: flex;
             flex-direction: column;
         }
@@ -292,24 +291,28 @@
                                    placeholder="Password">
                             <label for="password">Password</label>
                         </div>
-                        <form action="/whitelabel/loginPage" method="post">
                             <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">로그인</button>
-                        </form>
                         <div class="form-floating mb-3">
                                 <a href="/whitelabel/join">
-                                    <button type="button" class="w-100 btn btn-primary">회원가입</button>
+                                    <button type="button" class="btn btn-primary">회원가입</button>
                                 </a>
+                            <a href="/whitelabel/SearchId">
+                                <button type="button" class="btn btn-primary">아이디 찾기</button>
+                            </a>
+                            <a href="/whitelabel/SearchPw">
+                                <button type="button" class="btn btn-primary">비밀번호 찾기</button>
+                            </a>
                         </div>
                     </div>
-                    <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
-                    <hr class="my-4">
-                    <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
-                    <button id="naverIdLogin_loginButton" 
+                    <small style="color: white" >By clicking Sign up, you agree to the terms of use.</small>
+                    <hr style="color: white">
+                    <h2 style="color: white">Or use a third-party</h2>
+                    <button id="naverIdLogin_loginButton"
 					    onclick="changeFragmentAndSubmit()"
-					    class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" type="submit">
+					    class="w-100 py-2 mb-2 rounded-3" style="color: white; background-color: #4CAF50" type="submit">
 					    네이버로 로그인하기
 					</button>
-                    <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
+                    <button class="w-100 py-2 mb-2 rounded-3" style="color: white; background-color: yellow" type="submit">
                         <span th:if="${userId==null}">
                                     <a href="https://kauth.kakao.com/oauth/authorize?client_id=99e84536ac6051b1ba62273501c9cd57&redirect_uri=http://localhost:8080/whitelabel/redirectKakao&response_type=code">
                                 카카오로 로그인하기
@@ -326,7 +329,6 @@
         <p class="float-end mb-1">
             <a href="#">Back to top</a>
         </p>
-        <p class="mb-1">후원 계좌 토스뱅크 1000-0268-9417</p>
     </div>
 
 </footer>
@@ -373,7 +375,7 @@ function changeFragmentAndSubmit() {
             }
         });
     });
- 	
+
 
 </script>
 

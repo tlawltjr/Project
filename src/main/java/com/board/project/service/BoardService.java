@@ -23,8 +23,7 @@ public interface BoardService {
 	 * 이 메서드를 구현하는 구현체는 조인된 테이블의 쿼리를 통해 나오는 결과가 Object[]이기 때문에
 	 * 아래 entityToDto를 파라미터 3개로 변경해서 하나의 DTO로 변경하도록 정의했음
 	 */
-	PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO pageRequestDTO);
-	
+
 	
 	
 	

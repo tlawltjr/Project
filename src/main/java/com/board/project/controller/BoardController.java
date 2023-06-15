@@ -1,6 +1,5 @@
 package com.board.project.controller;
 
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.board.project.dto.BoardDTO;
-import com.board.project.dto.LoginDTO;
 import com.board.project.dto.MemberAdapter;
 import com.board.project.service.LoginService;
 import com.board.project.service.BoardService;
@@ -35,13 +33,7 @@ public class BoardController {
 	private final LoginService loginService;
 	private final BoardRepository boardRepository;
 	
-	@GetMapping({"/board"})
-	public void list(PageRequestDTO pageRequestDTO, Model model) {
 
-		model.addAttribute("list",service.getList(pageRequestDTO));
-		
-	}
-	
 	@GetMapping("/register")
 	public String register(@AuthenticationPrincipal MemberAdapter memberAdapter,Model model) {
 		

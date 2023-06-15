@@ -28,8 +28,6 @@ public class Member extends BaseEntity implements UserDetails{
     private String addr;
     private String detailaddr;
 
-    private boolean fromSocial;
-
     private String role;
 
     @Override
