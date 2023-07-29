@@ -1,5 +1,5 @@
 # 🏢 Whitelabel Survey - Spring Boot Project
- 맛집, 영화, 항공 최저가 추천 사이
+ 맛집, 영화, 항공 최저가 추천 사이트
 
 ### 💻 기술 스택
 
